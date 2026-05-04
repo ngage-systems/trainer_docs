@@ -9,7 +9,7 @@ Pictures of the front and back with parts labeled are planned (TODO: `front-anno
 3. Hooks  
 4. Clamps  
 5. Juice conduit  
-6. Accessory port  
+6. Accessory port (can be used for buttons, joystick, etc.)
 7. 29.4 VDC charging port  
 
 ## Rear / internal access

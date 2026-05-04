@@ -4,15 +4,15 @@ Annotated Juicer panel photo: TODO (`juicer-notated.png`).
 
 ## Basic operation
 
-The display indicates the active mode:
+The display indicates the active modes and accumulated stats since last reset:
 
 - **Reward** — Runs the pump while you hold the button.  
-- **Purge** — Runs long enough to deliver the configured amount of juice.  
+- **Purge** — Runs long enough to deliver the configured amount of liquid.  
 - **Reset** — Resets the counters.  
 
 ## Replacing the juice line
 
-Use an alkaline cleaner (for example **Five Star PBW Liquid**) weekly to keep the line clean. Replace the line when needed.
+Use dish soap daily and an alkaline cleaner (for example **Five Star PBW Liquid**) weekly to keep the line clean. Replace the line when needed.
 
 ### Parts required
 
@@ -25,10 +25,10 @@ Use an alkaline cleaner (for example **Five Star PBW Liquid**) weekly to keep th
 
 1. Lift the clamp on the Juicer pump and remove the juice line from the pump (see annotated Juicer photo TODO).  
 2. Use a **3.5 mm** hex key to unscrew the nozzle from the tip of the juice conduit (TODO: `nozzle-with-hex-key.png`).  
-3. Pull apart the nozzle barbed fitting from the juice line.  
+3. Separate the nozzle barbed fitting from the juice line.  
 4. Pull the old juice line through the conduit.  
-5. Use the old line to cut the new line to length.  
-6. Insert the new line into the conduit.  
+5. Use the old line as a reference to cut the new line to length.  
+6. Insert the new line through the conduit.  
 7. Push the barbed fitting of the new nozzle into the juice line.  
 8. Screw the new nozzle into the tip of the juice conduit. Allow the full juice line to rotate with the nozzle so it does not coil until the nozzle sits slightly recessed into the conduit tip.  
 9. Insert the new line into the pump in the correct direction: from the conduit into the **left** side of the pump, exiting to the **right** into the bottle.  
