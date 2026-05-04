@@ -4,11 +4,12 @@
 
 ## Basic operation
 
-The display indicates the active modes and accumulated stats since last reset:
+The display (1) indicates the active modes and accumulated stats since last reset:
 
-- **Reward** — Runs the pump while you hold the button.  
-- **Purge** — Runs long enough to deliver the configured amount of liquid.  
-- **Reset** — Resets the counters.  
+- **Reward** (2) — Runs the pump while you hold the button.  
+- **Purge** (3) — Runs long enough to deliver the configured amount of liquid.  
+- **Reset** (4) — Resets the counters.  
+
 
 ## Replacing the juice line
 
