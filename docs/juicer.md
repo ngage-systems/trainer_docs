@@ -1,6 +1,6 @@
 # Using the Juicer
 
-<img src="assets/juicer/juicer_annotated.png" alt="Juicer panel — display, buttons, and pump" width="240" />
+<img src="assets/juicer/juicer_annotated.png" alt="Juicer panel — display, buttons, and pump" width="300" />
 
 ## Basic operation
 
