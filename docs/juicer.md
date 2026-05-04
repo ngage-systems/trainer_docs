@@ -17,9 +17,9 @@ Use dish soap daily and an alkaline cleaner (for example **Five Star PBW Liquid*
 
 ### Parts required
 
-- At least **1 m** of tubing (silicone, **5 mm OD**, **3 mm ID**)  
-- **3.5 mm** hex key  
-- Replacement nozzle  
+- At least **1 m** of tubing (provided, silicone, **5 mm OD**, **3 mm ID**)  
+- **3.5 mm** hex key (provided)
+- Replacement nozzle (provided)
 - Scissors  
 
 ### Steps
@@ -67,4 +67,4 @@ send juicer {$::juicer do_cmd {{"set": {"adjust_flow_rate": {"expected_mls": 20.
 
 ---
 
-[← Basic operation](basic-operation.md) · [Attaching to the cage →](cage-mounting.md)
+[← Device overview and basic operation](basic-operation.md) · [Attaching to the cage →](cage-mounting.md)
