@@ -26,6 +26,7 @@ Pictures of the front and back with parts labeled are planned (TODO: `front-anno
    - 15.2 Reward  
    - 15.3 Purge  
    - 15.4 Reset  
+   - 15.5 Clamp
 16. Juice line  
 17. Water bottle  
 18. Smart bottle holder  

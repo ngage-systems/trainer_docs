@@ -2,7 +2,6 @@
 
 End-user guides for the behavioral training device: hardware overview, daily operation, Juicer maintenance and calibration, cage mounting, and connecting through ESS Control.
 
-Figures live under [`docs/assets/`](docs/assets/) (topic subfolders: `cage/`, `ess-control/`).
 
 ## Contents
 

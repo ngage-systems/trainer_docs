@@ -1,6 +1,6 @@
 # Using the Juicer
 
-Annotated Juicer panel photo: TODO (`juicer-notated.png`).
+![Juicer panel — display, buttons, and pump](assets/juicer/juicer_annotated.png)
 
 ## Basic operation
 
@@ -23,7 +23,7 @@ Use dish soap daily and an alkaline cleaner (for example **Five Star PBW Liquid*
 
 ### Steps
 
-1. Lift the clamp on the Juicer pump and remove the juice line from the pump (see annotated Juicer photo TODO).  
+1. Lift the clamp (labeled '5' in the image above) on the Juicer pump and remove the juice line from the pump.  
 2. Use a **3.5 mm** hex key to unscrew the nozzle from the tip of the juice conduit (TODO: `nozzle-with-hex-key.png`).  
 3. Separate the nozzle barbed fitting from the juice line.  
 4. Pull the old juice line through the conduit.  
