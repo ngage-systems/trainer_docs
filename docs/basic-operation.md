@@ -54,7 +54,7 @@
 10. Rinse the bottle (17), fill with soapy water or an alkaline cleaner such as **Five Star PBW Liquid**, purge, then purge with clean water.  
 11. Place the trainer on the charger.  
 
-It is recommended to leave the trainer **charging and powered on** when not in use.
+It is recommended to leave the trainer **charging and powered on** when not in use. If necessary to shutdown or reboot computer, press the power button (13) once and wait for it to shutdown. To cut power to the computer and monitor, flip the main switch (10) to off (note: 24V supply to Juicer pump remains active even when switch is off).
 
 ---
 
