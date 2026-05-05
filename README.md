@@ -1,6 +1,6 @@
 # Trainer user documentation
 
-![Trainer — oblique front view](docs/assets/device-overview/oblique_front.png)
+<img src="docs/assets/device-overview/oblique_front.png" alt="Trainer — oblique front view" style="width: 50%;" />
 
 End-user guides for the behavioral training device: hardware overview, daily operation, Juicer maintenance and calibration, cage mounting, and connecting through ESS Control.
 

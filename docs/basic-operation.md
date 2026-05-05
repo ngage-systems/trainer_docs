@@ -4,7 +4,7 @@
 
 ### Front (typical layout)
 
-![Trainer front with numbered parts](assets/device-overview/front-annotated.png)
+<img src="assets/device-overview/front-annotated.png" alt="Trainer front with numbered parts" style="width: 50%;" />
 
 1. Touchscreen monitor  
 2. Camera  
