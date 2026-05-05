@@ -44,7 +44,7 @@
 
 1. Turn on the main power switch (10).  
 2. Fill the water bottle (17) with the desired reward liquid and place it in the smart bottle holder (18).  
-3. Feed the juice line (16) into the bottle so it reaches the bottom, then screw on the top.  
+3. Feed the juice line (16) into the bottle through the hole in the center of the cap and ensure the cap is secured.
 4. Use the **Purge** button (15.3) so the juice line fills and operates correctly (see [Using the Juicer](juicer.md)).  
 5. Using a computer or tablet, [connect to the device](ess-control-quick-start.md), load the task, and confirm everything works before mounting.  
 6. [Attach the trainer to the cage](cage-mounting.md) using the hooks (3) and clamps (4).  
