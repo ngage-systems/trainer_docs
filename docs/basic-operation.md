@@ -2,9 +2,9 @@
 
 ## Get to know your device
 
-Pictures of the front and back with parts labeled are planned (TODO: `front-annotated.png`, `back-annotated.png`).
-
 ### Front (typical layout)
+
+![Trainer front with numbered parts](assets/device-overview/front-annotated.png)
 
 1. Touchscreen monitor  
 2. Camera  
@@ -15,6 +15,13 @@ Pictures of the front and back with parts labeled are planned (TODO: `front-anno
 7. 29.4 VDC charging port  
 
 ### Rear / internal access
+
+<table>
+<tr>
+<td width="50%"><img src="assets/device-overview/back-annotated.png" alt="Trainer rear with numbered parts" width="100%" /></td>
+<td width="50%"><img src="assets/juicer/juicer_annotated.png" alt="Juicer panel with parts 15.1–15.5" width="100%" /></td>
+</tr>
+</table>
 
 8. Battery  
 9. Power monitor  
