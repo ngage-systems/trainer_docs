@@ -8,13 +8,13 @@ Browse to:
 
 ![Workgroup URL in the browser](assets/ess-control/org-group-url.png)
 
-After provisioning and reboot, the device should appear within about **10–20 seconds** if Wi-Fi connected successfully.
+After provisioning and reboot, the device should appear within about **60 seconds** if Wi-Fi connected successfully.
 
 ![New device on dserv.net](assets/ess-control/new-device.png)
 
 ## Open ESS Control
 
-Click the **hostname** of the device you want to control.
+Click the **hostname** of the device you want to control. It may take a minute to fully connect on first boot.
 
 ![ESS Control main interface](assets/ess-control/ess-control-main.png)
 
