@@ -18,7 +18,7 @@ During provisioning, you will be asked whether to store data from this machine i
 
 ### Already-provisioned devices
 
-SSH into the trainer and run the enable script:
+SSH into the trainer and run the enable script. To find the trainer IP address, open your workgroup page at `https://dserv.net/w/[workgroup-name]` (see [Connecting to the device](ess-control-quick-start.md)).
 
 ```bash
 ssh [user]@[ip-address-of-trainer]
