@@ -2,6 +2,8 @@
 
 These instructions explain how to use agentic coding to modify or create a task within an existing system. This workflow is **not** recommended for developing new systems (for example, Search or Match-to-sample from scratch). Use it when you want to create or modify tasks inside a system that already exists on the trainer.
 
+This tutorial mainly uses **Cursor**, but **VS Code** works the same way for Remote SSH, editing files, and using the terminal. Where the steps mention Cursor-specific UI (for example, Plan or Agent mode), the equivalent in VS Code is very similar.
+
 ## Preparation
 
 1. Install [Cursor](https://cursor.com/) or [VS Code](https://code.visualstudio.com/). You may need a paid account with Cursor or one of the LLM providers if using VS Code.
@@ -58,7 +60,7 @@ These instructions explain how to use agentic coding to modify or create a task 
 
     ![Agent implementing the plan in Agent mode](assets/agentic-coding/time-to-code.png)
 
-13. The agent will likely request permission multiple times as it edits files. Choose **Run** for each request.
+13. The agent will likely request permission multiple times as it edits files and tests operation. Choose **Run** for each request.
 
 14. When it finishes, it should summarize what it changed. Review the summary and confirm it stayed within the scope you defined.
 
@@ -68,14 +70,14 @@ These instructions explain how to use agentic coding to modify or create a task 
 
 15. If the task does not work as expected, switch to **Ask** mode, describe the problem, and have the agent explain its understanding of the issue and proposed fix. Then switch to **Agent** mode and ask it to implement the fix.
 
-16. After confirming the task works, share the changes with other devices in your workgroup. From the terminal:
+16. After confirming the task works, share the changes with other devices in your workgroup. The examples below use `match_to_sample` because that is the system changed in step 10 — replace it with the name of the system you actually edited (the subdirectory under `systems/ess`, for example `search` or `colormatch`).
 
     ```bash
-    cd ~/systems/ess/match_to_sample/
-    dservctl push -w [your-workgroup] match_to_sample . --dry-run
+    cd ~/systems/ess/[system-name]/
+    dservctl push -w [your-workgroup] [system-name] . --dry-run
     ```
 
-    Example dry-run output:
+    Example dry-run output (for the `match_to_sample` example):
 
     ```
     Would push 3 changed script(s):
@@ -85,13 +87,13 @@ These instructions explain how to use agentic coding to modify or create a task 
     Unchanged: 15
     ```
 
-    If the dry run looks correct, push the changes:
+    If the dry run looks correct, push the changes (again using your system name instead of `match_to_sample`):
 
     ```bash
-    dservctl push -w [your-workgroup] match_to_sample . -m "fractal distractor transparency"
+    dservctl push -w [your-workgroup] [system-name] . -m "short description of your change"
     ```
 
-    Example push output:
+    Example push output (for the `match_to_sample` example):
 
     ```
     Pushed 3, added 0, unchanged 15
