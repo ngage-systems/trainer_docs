@@ -34,10 +34,43 @@ General reference for creating and modifying **systems**, **protocols**, and **v
 | `/usr/local/stim2/` | Stim / RMT server and examples. |
 | `/usr/local/dlsh/` | `dlsh`, stimdg, `dl_*` vector ops. |
 | `/usr/data/essdat/` | ESS data directory (`ESS_DATA_DIR`). |
+| `/home/lab/systems/.sync_displaced/` | Backups of local files overwritten by registry sync (see below). |
 
 **Overlay rule:** same relative path under `/home/lab/systems/` overrides `/usr/local/dserv/systems/`.
 
 **Cursor workspace** is often `/usr/local/dserv`; **your changes** go under `/home/lab/systems/`.
+
+### Registry sync and displaced local edits
+
+When coding with Cursor, **edit the regular paths** under `/home/lab/systems/ess/...` — do not require per-user overlay setup for normal agent sessions.
+
+**Why edits can disappear:** On dserv restart (or `dservctl sync`), the central registry pulls canonical scripts into the lab base tree (`$ESS_SYSTEM_PATH/ess/...`). If a local file differs from the registry copy, sync **backs up your version, then overwrites base**. This is expected — not a Cursor bug and not data loss if you know where the backup went.
+
+**Where backups live:** `/home/lab/systems/.sync_displaced/`
+
+Each displaced file has a sibling `.meta` file with the original path:
+
+```
+20260610_142634_ess_match_to_sample_fractal_fractal_loaders.tcl
+20260610_142634_ess_match_to_sample_fractal_fractal_loaders.tcl.meta
+```
+
+The `.meta` file records `original_path` and `relpath`. Use the newest timestamp when multiple backups exist for the same file.
+
+**Recovery workflow:**
+
+1. Notice missing changes after restart or sync (file reverted, feature gone).
+2. List backups: `ls -lt /home/lab/systems/.sync_displaced/`
+3. Read `.meta` to confirm `original_path`.
+4. Copy the backup back: `cp .sync_displaced/<timestamp>_ess_..._fractal_loaders.tcl <original_path>`
+5. Reload: `timeout 30 essctrl -c "ess::load_system <system> <protocol> <variant>"`
+6. Verify: `timeout 5 essctrl -c 'return [dservGet ess/loading_progress]'` → stage `"complete"`.
+
+**Workbench warning:** ESS Workbench may show a displaced-files banner after sync. ESS Control does not — check `.sync_displaced/` manually if edits vanish.
+
+**Making changes permanent:** Promote/push to the registry when the lab copy should become canonical, so future syncs pull your version instead of overwriting it.
+
+**Per-user overlay (optional, not default for Cursor):** ESS Workbench can set `ess::set_overlay_user <name>` so edits go to `/home/lab/systems/overlays/<user>/ess/...` and survive registry sync. ESS Control has no overlay user UI; this is optional and not required for agent development.
 
 ---
 
@@ -927,4 +960,4 @@ Verify fparams columns exist after load: `send ess { return [dl_exists stimdg:sa
 
 ---
 
-*Lab rig notes: use `essctrl -c` or `dservctl` for loads; verify with `loading_progress` + `send ess`; poll `ess/action_state` for trial phases (only while running); `dservctl --json listen` for events; after `systemctl restart dserv` wait 5s then `dservctl <subprocess> 'return ok'`; subprocess configs in `/usr/local/dserv/config/` need full restart, no hot-reload; watch `!TCL_ERROR` + `catch {source …}` for brace bugs in config Tcl; loader helpers = `::ess::system::protocol::proc`; no `dl_ge` (use `dl_gte`); scratch vectors in `dl_local` not temp stimdg columns; even `n_rep` for balanced MTS sides; nested trial slots: `lappend row [list $item]`, `dl_append $g:col [list $row]`, read whole cell then `[lindex $val $k]`; colors: same seed as geometry, not `set_layer_rgb` mixed with seeded shapes; viz: braced `set_viz_config` + `string map`, `package forget` + reload tm in `setup`, STIMTYPE before draw ON, `graphics/stimulus` length ≫ 400; `variable img_cache [dict create]` for PNG viz; PNG preview = `img_load` + per-draw `img_imgtolist` + `dlg_image`; PNG RMT = `shaderImageLoad` + `image` shader; object pool under `$ESS_STIMULUS_DIR/search/random_objects`.*
+*Lab rig notes: use `essctrl -c` or `dservctl` for loads; verify with `loading_progress` + `send ess`; poll `ess/action_state` for trial phases (only while running); `dservctl --json listen` for events; after `systemctl restart dserv` wait 5s then `dservctl <subprocess> 'return ok'`; registry sync on restart can overwrite `/home/lab/systems/ess/` — recover from `/home/lab/systems/.sync_displaced/`; subprocess configs in `/usr/local/dserv/config/` need full restart, no hot-reload; watch `!TCL_ERROR` + `catch {source …}` for brace bugs in config Tcl; loader helpers = `::ess::system::protocol::proc`; no `dl_ge` (use `dl_gte`); scratch vectors in `dl_local` not temp stimdg columns; even `n_rep` for balanced MTS sides; nested trial slots: `lappend row [list $item]`, `dl_append $g:col [list $row]`, read whole cell then `[lindex $val $k]`; colors: same seed as geometry, not `set_layer_rgb` mixed with seeded shapes; viz: braced `set_viz_config` + `string map`, `package forget` + reload tm in `setup`, STIMTYPE before draw ON, `graphics/stimulus` length ≫ 400; `variable img_cache [dict create]` for PNG viz; PNG preview = `img_load` + per-draw `img_imgtolist` + `dlg_image`; PNG RMT = `shaderImageLoad` + `image` shader; object pool under `$ESS_STIMULUS_DIR/search/random_objects`.*
