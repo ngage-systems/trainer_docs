@@ -18,10 +18,10 @@ During provisioning, you will be asked whether to store data from this machine i
 
 ### Already-provisioned devices
 
-SSH into the trainer and run the enable script. To find the trainer IP address, open your workgroup page at `https://dserv.net/w/[workgroup-name]` (see [Connecting to the device](ess-control-quick-start.md)).
+SSH into the trainer and run the enable script (see [SSH into a device](ssh-into-device.md)). The default username is `lab` if you did not change it during provisioning.
 
 ```bash
-ssh [user]@[ip-address-of-trainer]
+ssh lab@[ip-address-of-trainer]
 git clone https://github.com/ngage-systems/provision
 sudo bash ./provision/enable_cloud_trial_ingest.sh
 ```
