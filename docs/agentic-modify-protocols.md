@@ -44,15 +44,24 @@ This tutorial mainly uses **Cursor**, but **VS Code** works the same way for Rem
 
 ![Agent in Plan mode before implementation](assets/agentic-coding/time-to-plan.png)
 
-10. Tell the agent what you want to do. For example:
+10. Tell the agent what you want to do. A good prompt covers four things:
+
+    - **(a) Target** — which system, protocol, and variant you want to add or change.
+    - **(b) Change** — what you want added, removed, or modified (for example, a new dropdown option or a different default).
+    - **(c) Reference** — any existing tasks that already do something similar, so the agent can follow the same pattern.
+    - **(d) Context** — tell the agent to use the `~/agentic-coding` directory for how the trainer, ESS, and task code fit together.
+
+    Example prompt:
 
     ```
-    I want to modify the match_to_sample > fractal > random variant to allow me to specify the opacity of the distractor with a new dropdown option. For reference, this is done in the colormatch > noDistractor variant already.
+    I want to modify the match_to_sample > fractal > random variant to allow me to specify the opacity of the distractor with a new dropdown option.
+
+    For reference, colormatch > noDistractor already exposes distractor opacity in a similar way — use that as a model.
 
     Reference ~/agentic-coding directory
     ```
 
-    That last line is important so the agent has the context it needs to code and test the task.
+    In that example: **(a)** is `match_to_sample > fractal > random`; **(b)** is a new dropdown for distractor opacity; **(c)** is `colormatch > noDistractor`; **(d)** is the last line. Include all four even if some seem obvious — the agent works much better with explicit scope and pointers.
 
 11. When the agent finishes developing a plan (it may ask clarifying questions first), review the plan to confirm it understood your request. If something is wrong, stay in **Plan** mode and ask the agent to revise the plan.
 
