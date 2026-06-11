@@ -56,7 +56,7 @@ This tutorial mainly uses **Cursor**, but **VS Code** works the same way for Rem
 
 ## Plan and implement
 
-11. Switch to **Plan** mode. Develop and review a plan with the agent before implementing.
+11. Switch to **Plan** mode to develop and review a plan with the agent before implementing.
 
     ![Agent in Plan mode before implementation](assets/agentic-coding/time-to-plan.png)
 
