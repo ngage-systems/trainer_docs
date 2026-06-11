@@ -126,6 +126,33 @@ myvariant {
 
 ---
 
+## Choosing where to make the change
+
+Within an existing **system**, most task changes fall into one of three levels. Pick the **smallest** level that fits — less surface area means fewer files to touch and easier testing.
+
+| Level | When to use it | Typical files |
+|-------|----------------|---------------|
+| **Loader option** (edit an existing variant) | The change is a user-selectable parameter (dropdown value, numeric range, on/off toggle). An existing `loader_proc` can branch on the new value without a different trial structure. | `<protocol>_variants.tcl`, `<protocol>_loaders.tcl`; sometimes `<protocol>_stim.tcl` or `<protocol>.tcl` to read the value at trial time. See [Adding a loader option](#adding-a-loader-option-pattern). |
+| **New variant** (same protocol) | Trial generation differs — different defaults, a different `loader_proc`, or a distinct preset you want to keep separate from existing variants — but stimulus drawing, touch wiring, reward flow, and viz architecture stay the same as sibling variants in that protocol. | Primarily `<protocol>_variants.tcl`; add or extend `add_loader` procs in `<protocol>_loaders.tcl` if needed. Use temporary names (`step1`, `debug`, …) while bringing up; merge when stable. |
+| **New protocol** (same system) | Stimulus type, trial phases, touch/response wiring, or preview (viz) architecture differ materially from existing protocols. Copy a sibling protocol folder and adapt. | Full `<protocol>/` directory: `<protocol>.tcl`, `*_loaders.tcl`, `*_stim.tcl`, `*_variants.tcl`. See [Checklist: new or modified protocol](#checklist-new-or-modified-protocol). |
+
+**Rules of thumb:**
+
+1. **Start with “can this be a dropdown?”** If yes, it is almost always a loader option on an existing variant — not a new variant or protocol.
+2. **Same drawing and trial flow, different trial table?** New variant (or extend an existing loader). Example: another `n_rep` / `reward_rule` preset, or a loader that builds a different stimdg layout while reusing the same `*_stim.tcl`.
+3. **Different drawing pipeline or response model?** New protocol under the same system. Example: `match_to_sample/colormatch` (colored squares), `match_to_sample/fractal` (vector fractals), and `match_to_sample/images` (PNG pool) are three protocols — not three variants of one protocol.
+4. **Cross-protocol reference is normal.** A feature in protocol A can copy a pattern from protocol B in the same system (e.g. distractor opacity in `colormatch` applied to `fractal`). That does not mean they should be merged into one protocol.
+5. **New system** (e.g. building Search or Match-to-sample from scratch) is out of scope for incremental edits — copy an entire system template and follow the full protocol checklist.
+
+**Decision questions** (good for Ask mode before planning):
+
+- What should the experimenter select in ESS Control — a new dropdown value, a new variant name, or a new protocol name?
+- Does an existing `loader_proc` already build the right stimdg shape, or do you need a new one?
+- Can existing `*_stim.tcl` draw the result, or does RMT drawing / touch / viz need to change?
+- Which existing protocol or variant is the closest match to copy from?
+
+---
+
 ## Data flow
 
 ```mermaid
@@ -417,6 +444,8 @@ Touch/reward paths are not exercised this way; use the listen + simulate loop ab
 
 ## Checklist: new or modified protocol
 
+Use this when the [Choosing where to make the change](#choosing-where-to-make-the-change) table points to **new protocol** — stimulus type, trial flow, or viz architecture differs from siblings in the same system.
+
 1. Copy structure from a working protocol in the same system.
 2. Edit under `/home/lab/systems/ess/<system>/<protocol>/`.
 3. Confirm `ESS_SYSTEM_PATH` points at `/home/lab/systems` (`pre-systemdir.tcl`).
@@ -430,6 +459,8 @@ Touch/reward paths are not exercised this way; use the listen + simulate loop ab
 ---
 
 ## Adding a loader option (pattern)
+
+Use this when the [Choosing where to make the change](#choosing-where-to-make-the-change) table points to **loader option** — the smallest change level.
 
 1. **`_variants.tcl`** — add to `loader_options { my_option { a b } }`.
 2. **`_loaders.tcl`** — add `my_option` to the `add_loader` braced arg list; use `$my_option` in the body; expose per-trial data via `dl_set $g:my_column …` if stim/protocol need it.

@@ -2,7 +2,7 @@
 
 These instructions explain how to use agentic coding to modify or create a task within an existing system. This workflow is **not** recommended for developing new systems (for example, Search or Match-to-sample from scratch). Use it when you want to create or modify tasks inside a system that already exists on the trainer.
 
-This tutorial mainly uses **Cursor**, but **VS Code** works the same way for Remote SSH, editing files, and using the terminal. Where the steps mention Cursor-specific UI (for example, Plan or Agent mode), the equivalent in VS Code is very similar.
+This tutorial mainly uses **Cursor**, but **VS Code** works the same way for Remote SSH, editing files, and using the terminal. Where the steps mention Cursor-specific UI (for example, Ask, Plan, or Agent mode), the equivalent in VS Code is very similar.
 
 ## Preparation
 
@@ -38,20 +38,36 @@ This tutorial mainly uses **Cursor**, but **VS Code** works the same way for Rem
 
    This places the contents of that directory in your home folder (`~/agentic-coding`).
 
-9. In the agent panel, switch to **Plan** mode. It is good practice to develop and review a plan with the agent first, then switch to **Agent** mode to implement it.
+## Decide where to change (Ask mode)
 
-## Coding
+9. In the agent panel, switch to **Ask** mode. Before planning or editing code, confirm **where** the change belongs: a new loader option on an existing variant, a new variant, or a new protocol. Many developers are unsure at first — use the agent to explore the codebase and recommend the smallest fit.
 
-![Agent in Plan mode before implementation](assets/agentic-coding/time-to-plan.png)
+10. Describe what you want in plain language and ask the agent to recommend an approach. Point it at the reference docs:
 
-10. Tell the agent what you want to do. A good prompt covers four things:
+    ```
+    I want [describe the behavior you need — what the animal sees, what the experimenter should control, etc.].
 
-    - **(a) Target** — which system, protocol, and variant you want to add or change.
+    Which is the right level of change: (a) add a loader option to an existing variant, (b) add a new variant to an existing protocol, or (c) create a new protocol? Recommend one, name the closest existing protocol/variant to copy from, and list which files would need to change.
+
+    Read ~/agentic-coding/agents.md — especially "Choosing where to make the change".
+    ```
+
+    Review the agent's answer. If you disagree or the goal is ambiguous, stay in **Ask** mode and refine until you agree on system, protocol, variant (if any), and change level.
+
+## Plan and implement
+
+11. Switch to **Plan** mode. Develop and review a plan with the agent before implementing.
+
+    ![Agent in Plan mode before implementation](assets/agentic-coding/time-to-plan.png)
+
+12. Tell the agent what you want to do. A good prompt covers four things:
+
+    - **(a) Target** — which system, protocol, and variant you want to add or change (from the Ask-mode decision).
     - **(b) Change** — what you want added, removed, or modified (for example, a new dropdown option or a different default).
     - **(c) Reference** — any existing tasks that already do something similar, so the agent can follow the same pattern.
     - **(d) Context** — tell the agent to use the `~/agentic-coding` directory for how the trainer, ESS, and task code fit together.
 
-    Example prompt:
+    Example prompt (after Ask mode confirmed this is a loader option on an existing variant):
 
     ```
     I want to modify the match_to_sample > fractal > random variant to allow me to specify the opacity of the distractor with a new dropdown option.
@@ -63,23 +79,23 @@ This tutorial mainly uses **Cursor**, but **VS Code** works the same way for Rem
 
     In that example: **(a)** is `match_to_sample > fractal > random`; **(b)** is a new dropdown for distractor opacity; **(c)** is `colormatch > noDistractor`; **(d)** is the last line. Include all four even if some seem obvious — the agent works much better with explicit scope and pointers.
 
-11. When the agent finishes developing a plan (it may ask clarifying questions first), review the plan to confirm it understood your request. If something is wrong, stay in **Plan** mode and ask the agent to revise the plan.
+13. When the agent finishes developing a plan (it may ask clarifying questions first), review the plan to confirm it understood your request. If something is wrong, stay in **Plan** mode and ask the agent to revise the plan.
 
-12. When you are satisfied, click **Build** or switch to **Agent** mode and ask it to implement the plan.
+14. When you are satisfied, click **Build** or switch to **Agent** mode and ask it to implement the plan.
 
     ![Agent implementing the plan in Agent mode](assets/agentic-coding/time-to-code.png)
 
-13. The agent will likely request permission multiple times as it edits files and tests operation. Choose **Run** for each request.
+15. The agent will likely request permission multiple times as it edits files and tests operation. Choose **Run** for each request.
 
-14. When it finishes, it should summarize what it changed. Review the summary and confirm it stayed within the scope you defined.
+16. When it finishes, it should summarize what it changed. Review the summary and confirm it stayed within the scope you defined.
 
     ![Agent changes summary after implementation](assets/agentic-coding/changes-summary.png)
 
 ## Testing and disseminating
 
-15. If the task does not work as expected, switch to **Ask** mode, describe the problem, and have the agent explain its understanding of the issue and proposed fix. Then switch to **Agent** mode and ask it to implement the fix.
+17. If the task does not work as expected, switch to **Ask** mode, describe the problem, and have the agent explain its understanding of the issue and proposed fix. Then switch to **Agent** mode and ask it to implement the fix.
 
-16. After confirming the task works, share the changes with other devices in your workgroup. The examples below use `match_to_sample` because that is the system changed in step 10 — replace it with the name of the system you actually edited (the subdirectory under `systems/ess`, for example `search` or `colormatch`).
+18. After confirming the task works, share the changes with other devices in your workgroup. The examples below use `match_to_sample` because that is the system changed in the example above — replace it with the name of the system you actually edited (the subdirectory under `systems/ess`, for example `search` or `colormatch`).
 
     ```bash
     cd ~/systems/ess/[system-name]/
@@ -135,7 +151,7 @@ This tutorial mainly uses **Cursor**, but **VS Code** works the same way for Rem
     Pushed 1, unchanged 8
     ```
 
-17. On another trainer, pull the changes by clicking **Sync** in the top-right corner of **ESS Control**.
+19. On another trainer, pull the changes by clicking **Sync** in the top-right corner of **ESS Control**.
 
 ---
 
