@@ -56,7 +56,7 @@ Use dish soap daily and an alkaline cleaner (for example **Five Star PBW Liquid*
 
 ### Adjust flow rate
 
-1. In **ESS Control**, open the **Terminal** window in the bottom pane.  
+1. In **ESS Control**, open the **Terminal** window in the bottom pane. If the pane is too small on your screen, open it full screen by selecting **Dserv Terminal** from the menu in the top-right corner.  
 2. Paste the command below. Replace `expected_mls` and `actual_mls` with your measured values:
 
 ```text
@@ -64,6 +64,34 @@ send juicer {$::juicer do_cmd {{"set": {"adjust_flow_rate": {"expected_mls": 20.
 ```
 
 3. The reply should show the old and new `flow_rate` settings; the Juicer display should reflect the new value.
+
+## Adjusting settings via terminal
+
+In **ESS Control**, open the **Terminal** window in the bottom pane. If the pane is too small on your screen, open it full screen by selecting **Dserv Terminal** from the menu in the top-right corner.
+
+### Adjust purge volume
+
+```text
+send juicer {$::juicer get purge_vol}
+{"purge_vol":20}
+send juicer {$::juicer set purge_vol 25}
+{"status":"success"}
+send juicer {$::juicer get purge_vol}
+{"purge_vol":25}
+```
+
+### Adjust pump speed
+
+```text
+send juicer {$::juicer get target_rps}
+{"target_rps":4}
+send juicer {$::juicer set target_rps 5}
+{"status":"success"}
+send juicer {$::juicer get target_rps}
+{"target_rps":5}
+```
+
+For the full list of commands, see the [Juicer API](https://github.com/ngage-systems/juicer/blob/main/api.md).
 
 ---
 
