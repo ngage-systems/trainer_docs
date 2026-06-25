@@ -36,7 +36,7 @@ You should see:
 
 > trialsync started. API key and target server loaded. Outbox empty.
 
-Then email [info@ngage.systems](mailto:info@ngage.systems) to grant this device access to your workgroup's database.
+An administrator is automatically notified when a new device requests access and will typically grant access to your workgroup's database within about 60 minutes.
 
 ## 3. Create an analysis user
 
