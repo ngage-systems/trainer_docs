@@ -4,7 +4,7 @@ Trainer devices can automatically upload each trial outcome to a cloud server as
 
 ## Security and access
 
-Each step below requires manual approval from an ngage systems administrator. Contact [info@ngage.systems](mailto:info@ngage.systems) when prompted.
+Each step below requires manual approval from an ngage systems administrator for workgroup and device access. Analysis user access is usually granted automatically; contact [info@ngage.systems](mailto:info@ngage.systems) if you need help.
 
 ## 1. Set up your workgroup database
 
@@ -41,7 +41,11 @@ Then email [info@ngage.systems](mailto:info@ngage.systems) to grant this device 
 ## 3. Create an analysis user
 
 1. Visit [ngage.systems/analysis](https://ngage.systems/analysis) and create a user account.
-2. Email [info@ngage.systems](mailto:info@ngage.systems) to grant that account access to your workgroup's database.
+2. An administrator is automatically notified when a new user requests access and will typically grant access to your workgroup's database within about 60 minutes. If you still cannot log in after about an hour, email [info@ngage.systems](mailto:info@ngage.systems) with your account email and workgroup name.
+
+## 4. Log in to the analysis site
+
+Once your account has been approved, you will be able to sign in at [ngage.systems/analysis](https://ngage.systems/analysis) to view trial data and run analyses.
 
 ---
 
