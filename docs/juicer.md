@@ -40,11 +40,13 @@ Use dish soap daily and an alkaline cleaner (for example **Five Star PBW Liquid*
 
 ### Method 1 — 0.1 g precision scale (preferred, &lt;1% error)
 
+<img src="assets/juicer/scale.jpg" alt="Precision scale measuring juice purge output" width="200" />
+
 1. Put at least **100 mL** water in the bottle, insert the juice line, and screw on the lid.  
 2. Purge at least **10 mL** so the line is full of water.  
 3. Place a vessel on the scale under the juice conduit spout.  
-4. Purge **20 mL** or more (more improves accuracy) into the vessel.  
-5. If the scale reads below **19.8 g** or above **20.2 g** for a 20 mL nominal purge, adjust flow rate — see [Adjust flow rate](#adjust-flow-rate).  
+4. Purge **40 mL** or more (more improves accuracy) into the vessel.  
+5. If the scale reads below **39.6 g** or above **40.4 g** for a 40 mL nominal purge, adjust flow rate — see [Adjust flow rate](#adjust-flow-rate).  
 
 ### Method 2 — Included water bottle (~5–10% error)
 
@@ -60,7 +62,7 @@ Use dish soap daily and an alkaline cleaner (for example **Five Star PBW Liquid*
 2. Paste the command below. Replace `expected_mls` and `actual_mls` with your measured values:
 
 ```text
-send juicer {$::juicer do_cmd {{"set": {"adjust_flow_rate": {"expected_mls": 20.0, "actual_mls": 20.8}}}}}
+send juicer {$::juicer do_cmd {{"set": {"adjust_flow_rate": {"expected_mls": 40.0, "actual_mls": 39.1}}}}}
 ```
 
 3. The reply should show the old and new `flow_rate` settings; the Juicer display should reflect the new value.
