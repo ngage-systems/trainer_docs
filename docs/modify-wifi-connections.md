@@ -2,7 +2,7 @@
 
 If you decide you'd like to connect your trainer to a different WiFi network than the one(s) originally provisioned, follow the instructions below. 
 
-It should be noted that having multiple stored networks (SSIDs) can sometimes lead to unpredictable results when those networks cover overlapping areas, as the trainer can jump from one to another and become seemingly unresponsive. For this reason, we recommend only using only storing multiple SSIDs if they don't cover overlapping areas.
+It should be noted that having multiple stored networks (SSIDs) can sometimes lead to unpredictable results when those networks cover overlapping areas, as the trainer can jump from one to another and become seemingly unresponsive. For this reason, we recommend only storing multiple SSIDs if they don't cover overlapping areas.
 
 First SSH into a device (see [SSH into a device](ssh-into-device.md)).
 
