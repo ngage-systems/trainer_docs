@@ -2,7 +2,7 @@
 
 <img src="docs/assets/device-overview/oblique_front.png" alt="Trainer — oblique front view" style="width: 50%;" />
 
-End-user guides for the behavioral training device: hardware overview, daily operation, Juicer maintenance and calibration, cage mounting, connecting through ESS Control, SSH access, editing task variants, and cloud trial upload.
+End-user guides for the behavioral training device: hardware overview, daily operation, Juicer maintenance and calibration, cage mounting, connecting through ESS Control, SSH access, editing task variants, cloud trial upload, system software updates, and offline mode.
 
 
 ## Contents
@@ -15,4 +15,6 @@ End-user guides for the behavioral training device: hardware overview, daily ope
 | [Connecting to the device (quick test)](docs/ess-control-quick-start.md) | dserv.net, ESS Control, and a simple Search trial. |
 | [SSH into a device](docs/ssh-into-device.md) | Find the IP, log in with your provisioning credentials (Windows, macOS, Linux). |
 | [Enable cloud trial upload](docs/enable-cloud.md) | Upload trial data to the cloud, use the analysis site, and access data via API. |
+| [Update system software](docs/update-system-software.md) | Update dserv, stim2, and dlsh from Lab Mesh. |
+| [Enable offline mode](docs/enable-offline-mode.md) | Run without dserv.net registration or automatic task updates. |
 | [Modifying variant options](docs/modify-variant-options.md) | Change dropdown options for a task variant in ESS Workbench. |
