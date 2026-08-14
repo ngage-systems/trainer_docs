@@ -75,7 +75,7 @@ Within a few seconds, a card should appear for the new box. Click **open** near 
 
 ### 5. Save to flash
 
-At the top of the page, it should notify you that changes were made. Scroll down tot the bottom and click **Save to flash** so the box remembers this connection after reboot.
+At the top of the page, it should notify you that changes were made. Scroll down to the bottom and click **Save to flash** so the box remembers this connection after reboot.
 
 ![Save to flash](assets/io-box/save.png)
 
