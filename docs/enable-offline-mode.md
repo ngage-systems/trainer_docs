@@ -52,4 +52,4 @@ After reboot, the device registers with dserv.net again and resumes automatic ta
 
 ---
 
-[← Update system software](update-system-software.md) · [Documentation home](../README.md)
+[← Install an I/O box](install-iobox.md) · [Documentation home](../README.md)

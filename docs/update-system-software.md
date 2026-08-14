@@ -32,4 +32,4 @@ Update each component that has a blue **Update** button. Always start with **dls
 
 ---
 
-[← Enable cloud trial upload](enable-cloud.md) · [Enable offline mode →](enable-offline-mode.md)
+[← Enable cloud trial upload](enable-cloud.md) · [Install an I/O box →](install-iobox.md)
