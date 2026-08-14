@@ -81,7 +81,7 @@ At the top of the page, it should notify you that changes were made. Scroll down
 
 ### 6. Confirm the box is active
 
-Within about 30-60 seconds, the box should show as connected with (`sync ptp`). It may take up to two minutes to switch from . Inputs, outputs, and analog groups (including **eye**) should update live.
+Within about 30-60 seconds, the box should show as connected with (`sync ptp`). It may take up to two minutes to properly sync the clocks of the trainer and I/O box. Inputs, outputs, and analog groups (including **eye**) should update live.
 
 ![Active I/O box with PTP synced](assets/io-box/active.png)
 
