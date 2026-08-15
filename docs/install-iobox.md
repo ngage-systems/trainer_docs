@@ -34,7 +34,7 @@ Plug USB-C power (either port on the I/O box works for this purpose) and Etherne
 
 Open ESS Control for the trainer (see [Connecting to the device](ess-control-quick-start.md)). In the top right, click the **ESS Control** dropdown and select **Extio Boxes**.
 
-![ESS Control menu with Extio Boxes](assets/io-box/extio_boxes.png)
+<img src="assets/io-box/extio_boxes.png" alt="ESS Control menu with Extio Boxes" style="width: 50%;" />
 
 ### 3. Adopt the box
 
@@ -64,7 +64,7 @@ Within about 30-60 seconds, the box should show as connected with (`sync ptp`). 
 
 Return to **ESS Control**. The **Eye/Touch Monitor** should show live eye coordinates. Use **Recenter**, **Center**, **Gain**, and **Invert** as needed. Note: when using analog inputs for eye position, the gain settings will likely be quite low (~0.01).
 
-![Eye/Touch Monitor with live eye position](assets/io-box/eye_position.png)
+<img src="assets/io-box/eye_position.png" alt="Eye/Touch Monitor with live eye position" style="width: 50%;" />
 
 ## Troubleshooting
 
