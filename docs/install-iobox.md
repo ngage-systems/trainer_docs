@@ -28,7 +28,7 @@ The setup script installs current software and configures the trainer as the PTP
 
 ### 1. Connect the I/O box
 
-Plug USB-C power (either port on the I/O box works for this purpose) and Ethernet into the I/O box. 
+Plug USB-C power (either port on the I/O box works for this purpose) and Ethernet into the I/O box. Plug the other end of the Ethernet cable into the same switch or router the trainer is connected to. 
 
 ### 2. Open Extio Boxes
 
@@ -65,6 +65,14 @@ Within about 30-60 seconds, the box should show as connected with (`sync ptp`). 
 Return to **ESS Control**. The **Eye/Touch Monitor** should show live eye coordinates. Use **Recenter**, **Center**, **Gain**, and **Invert** as needed. Note: when using analog inputs for eye position, the gain settings will likely be quite low (~0.01).
 
 ![Eye/Touch Monitor with live eye position](assets/io-box/eye_position.png)
+
+## Troubleshooting
+
+If the box adopts but never shows (`sync ptp`), or sync appears and then drops, the wired path between the trainer and the I/O box is the usual cause. PTP needs Ethernet between the trainer's Ethernet port and the I/O box. It will not sync over Wi-Fi.
+
+Many consumer and campus switches filter or delay the multicast traffic PTP uses. Put both devices on an unmanaged gigabit switch, or use two LAN ports on the same router. Avoid guest networks, and turn off IGMP snooping if that setting exists.
+
+On a campus or managed network, ask IT to allow PTP multicast (UDP ports 319 and 320) on that VLAN, or use a PTP-aware (IEEE 1588) switch.
 
 ---
 
