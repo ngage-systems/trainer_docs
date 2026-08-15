@@ -12,42 +12,17 @@ Update **dlsh**, **dserv**, amd **stim2** first so the trainer has current PTP s
 
 Connect over SSH. See [SSH into a device](ssh-into-device.md).
 
-### 3. Install PTP packages
+### 3. Configure the trainer as PTP grandmaster
 
 On the trainer, run:
 
 ```bash
-sudo apt update
-sudo apt install linuxptp ethtool
+curl -sSL https://dserv.net/setup?profile=incage | bash -s -- --time-role "grandmaster eth0"
+sudo apt install chrony
+sudo cp /usr/local/dserv/systemd/chrony-grandmaster.conf /etc/chrony/conf.d/10-dserv-grandmaster.conf
 ```
 
-`ethtool` may already be installed.
-
-### 4. Make the trainer the PTP grandmaster
-
-```bash
-sudo dserv-ptp-setup grandmaster eth0
-```
-
-When it finishes you should see:
-
-- `portState MASTER`
-- `dserv-ptp4l@eth0.service` enabled / active
-- `dserv-phc2sys@eth0.service` enabled / active
-
-Verify the role anytime with:
-
-```bash
-sudo dserv-ptp-setup
-```
-
-A grandmaster is its own time reference, so `offsetFromMaster 0.0` is expected.
-
-Then restart dserv:
-
-```bash
-sudo systemctl restart dserv
-```
+The setup script installs current software and configures the trainer as the PTP grandmaster on `eth0`. Then install chrony and copy the grandmaster config into place.
 
 ## Adopt the I/O box
 
