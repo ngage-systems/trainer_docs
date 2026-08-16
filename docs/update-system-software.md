@@ -2,6 +2,8 @@
 
 Use Lab Mesh to install available updates for **dserv**, **stim2**, and **dlsh** on a trainer.
 
+Old method:
+
 ## 1. Find the device IP
 
 Open your workgroup page on [dserv.net](https://dserv.net) (see [Connecting to the device](ess-control-quick-start.md)). Note the IP address of the device you want to update.
