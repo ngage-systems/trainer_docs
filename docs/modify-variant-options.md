@@ -44,4 +44,4 @@ Use ESS Workbench to change the dropdown options available for a task variant.
 
 ---
 
-[← Connecting to the device](ess-control-quick-start.md) · [Install camera support →](install-camera.md)
+[← Connecting to the device](ess-control-quick-start.md) · [Documentation home](../README.md)
