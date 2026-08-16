@@ -1,6 +1,6 @@
 # Install camera support
 
-Enable the built-in CSI camera so ESS Control can show a live preview at `/camera.html`.
+Enable the trainer camera so ESS Control can show a live preview at `/camera.html`.
 
 ## 1. Update system software
 
@@ -39,8 +39,6 @@ For example, if ESS Control is:
 browse to:
 
 `http://192.168.0.51:2565/camera.html`
-
-![Camera page URL](assets/camera/url.png)
 
 ## 6. Rotate the preview
 
