@@ -2,7 +2,7 @@
 
 <img src="docs/assets/device-overview/oblique_front.png" alt="Trainer — oblique front view" style="width: 50%;" />
 
-End-user guides for the behavioral training device: hardware overview, daily operation, Juicer maintenance and calibration, cage mounting, connecting through ESS Control, SSH access, editing task variants, cloud trial upload, system software updates, I/O box setup, and offline mode.
+End-user guides for the behavioral training device: hardware overview, daily operation, Juicer maintenance and calibration, cage mounting, connecting through ESS Control, SSH access, editing task variants, cloud trial upload, system software updates, I/O box setup, offline mode, and camera setup.
 
 
 ## Contents
@@ -19,3 +19,4 @@ End-user guides for the behavioral training device: hardware overview, daily ope
 | [Install an I/O box](docs/install-iobox.md) | PTP grandmaster setup, adopt the box in ESS Control, save to flash. |
 | [Enable offline mode](docs/enable-offline-mode.md) | Run without dserv.net registration or automatic task updates. |
 | [Modifying variant options](docs/modify-variant-options.md) | Change dropdown options for a task variant in ESS Workbench. |
+| [Install camera support](docs/install-camera.md) | Update software, install dserv Camera, start the preview, rotate if needed. |
