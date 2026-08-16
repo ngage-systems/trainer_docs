@@ -32,7 +32,7 @@ Plug USB-C power (either port on the I/O box works for this purpose) and Etherne
 
 ### 2. Open Extio Boxes
 
-Open ESS Control for the trainer (see [Connecting to the device](ess-control-quick-start.md)). In the top right, click the **ESS Control** dropdown and select **Extio Boxes**. You made need to scroll down to find it.
+Open ESS Control for the trainer (see [Connecting to the device](ess-control-quick-start.md)). In the top right, click the **ESS Control** dropdown and select **Extio Boxes**. You may need to scroll down to find it.
 
 <img src="assets/io-box/extio_boxes.png" alt="ESS Control menu with Extio Boxes" width="251" />
 
