@@ -1,14 +1,24 @@
 # Update system software (dserv / stim2 / dlsh)
 
-Use Lab Mesh to install available updates for **dserv**, **stim2**, and **dlsh** on a trainer.
+Install available updates for **dserv**, **stim2**, and **dlsh** on a trainer.
 
-Old method:
+## Click the hostname
 
-## 1. Find the device IP
+In ESS Control, click the **hostname** in the top bar (for example **rh-1**).
+
+![Click the hostname in ESS Control](assets/update-system/hostname.png)
+
+That opens the system software management page.
+
+If you cannot click the hostname, the trainer is on older software. Follow the method below instead.
+
+## Older software: open Lab Mesh by IP
+
+### 1. Find the device IP
 
 Open your workgroup page on [dserv.net](https://dserv.net) (see [Connecting to the device](ess-control-quick-start.md)). Note the IP address of the device you want to update.
 
-## 2. Open Lab Mesh
+### 2. Open Lab Mesh
 
 In the browser, go to that IP **without** the port.
 
@@ -22,15 +32,15 @@ browse to:
 
 That page is the **Lab Mesh** directory. It lists all devices on your mesh.
 
-## 3. Open the update panel
+### 3. Open the update panel
 
 Find the device you want to update. On the right, click the **gear** icon to open the side panel.
 
 The panel lists software components (**dserv**, **stim2**, **dlsh**). Components with an available update show a blue **Update** button.
 
-## 4. Apply updates
+## Apply updates
 
-Update each component that has a blue **Update** button. Always start with **dlsh**, then update **stim2** and **dserv**.
+If updates exist, apply them in this order: **dlsh**, then **dserv**, then **stim2**. Skip any component that does not have an update.
 
 ---
 
