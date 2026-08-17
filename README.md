@@ -2,7 +2,7 @@
 
 <img src="docs/assets/device-overview/oblique_front.png" alt="Trainer — oblique front view" style="width: 50%;" />
 
-End-user guides for the behavioral training device: hardware overview, daily operation, Juicer maintenance and calibration, cage mounting, connecting through ESS Control, SSH access, editing task variants, cloud trial upload, system software updates, I/O box setup, offline mode, Wi-Fi connections, and agentic coding.
+End-user guides for the behavioral training device: hardware overview, daily operation, Juicer maintenance and calibration, cage mounting, connecting through ESS Control, SSH access, re-provisioning, editing task variants, cloud trial upload, system software updates, I/O box setup, offline mode, Wi-Fi connections, and agentic coding.
 
 
 ## Contents
@@ -14,6 +14,7 @@ End-user guides for the behavioral training device: hardware overview, daily ope
 | [Attaching to the cage](docs/cage-mounting.md) | Requirements, hooks and clamps, mounting steps. |
 | [Connecting to the device (quick test)](docs/ess-control-quick-start.md) | dserv.net, ESS Control, and a simple Search trial. |
 | [SSH into a device](docs/ssh-into-device.md) | Find the IP, log in with your provisioning credentials (Windows, macOS, Linux). |
+| [Re-provision a trainer](docs/reprovision-trainer.md) | Boot from eMMC and run the setup flow again. |
 | [Enable cloud trial upload](docs/enable-cloud.md) | Upload trial data to the cloud, use the analysis site, and access data via API. |
 | [Update system software](docs/update-system-software.md) | Update dserv, stim2, and dlsh from Lab Mesh. |
 | [Install an I/O box](docs/install-iobox.md) | PTP grandmaster setup, adopt the box in ESS Control, save to flash. |

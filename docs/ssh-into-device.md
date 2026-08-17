@@ -10,7 +10,7 @@ SSH lets you run commands on the device from your laptop or desktop. You typical
   sudo systemctl status dserv
   ```
 
-- **Re-provision the device** — Switch the boot drive to the eMMC to run the provisioning flow again.
+- **Re-provision the device** — Switch the boot drive to the eMMC to run the provisioning flow again. See [Re-provision a trainer](reprovision-trainer.md).
 
 - **Create and modify tasks** — Edit task code on the device remotely using VS Code with **Remote - SSH**, or other editors and AI coding tools that support SSH.
 
@@ -61,4 +61,4 @@ On first login, accept the host key fingerprint when prompted. Enter the passwor
 
 ---
 
-[← Connecting to the device](ess-control-quick-start.md) · [Enable cloud trial upload →](enable-cloud.md)
+[← Connecting to the device](ess-control-quick-start.md) · [Re-provision a trainer →](reprovision-trainer.md)

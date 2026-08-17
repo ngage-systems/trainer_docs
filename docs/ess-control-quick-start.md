@@ -10,6 +10,8 @@ Browse to:
 
 After provisioning and reboot, the device should appear within about **60 seconds** if Wi-Fi connected successfully.
 
+The first boot after provisioning may show a login screen on the trainer. That is expected; you do not need to log in. Load a task such as **Search** below, and **stim2** should take over the screen.
+
 ![New device on dserv.net](assets/ess-control/new-device.png)
 
 ## Open ESS Control
