@@ -6,23 +6,33 @@ Connect an I/O box to a trainer for digital and analog I/O such as eye tracking.
 
 ### 1. Update system software
 
-Update **dlsh**, **dserv**, amd **stim2** first so the trainer has current PTP support. Follow [Update system software](update-system-software.md). Always update **dlsh** before **dserv** and **stim2** if those updates are available.
+Update **dlsh**, **dserv**, and **stim2** first so the trainer has current PTP support. Follow [Update system software](update-system-software.md). Always update **dlsh** before **dserv** and **stim2** if those updates are available.
 
-### 2. SSH into the trainer
+Stay on the system software page after the updates finish (the page that opens when you click the hostname in ESS Control). If you updated from an older **dserv**, refresh the page so the **PROFILE** and **TIME** options appear.
 
-Connect over SSH. See [SSH into a device](ssh-into-device.md).
+### 2. Set the profile to incage
 
-### 3. Configure the trainer as PTP grandmaster
+In the **SYSTEM** section, set **PROFILE** to **incage** and click **Apply**.
 
-On the trainer, run:
+![Set PROFILE to incage and click Apply](assets/io-box/profile.png)
 
-```bash
-curl -sSL https://dserv.net/setup?profile=incage | bash -s -- --time-role "grandmaster eth0"
-sudo apt install chrony
-sudo cp /usr/local/dserv/systemd/chrony-grandmaster.conf /etc/chrony/conf.d/10-dserv-grandmaster.conf
-```
+### 3. Set the time role
 
-The setup script installs current software and configures the trainer as the PTP grandmaster on `eth0`. Then install chrony and copy the grandmaster config into place.
+In the **TIME** section, click **Set role**.
+
+![TIME section with Set role](assets/io-box/set_role.png)
+
+### 4. Choose grandmaster on eth0
+
+Choose **grandmaster** and **eth0**, then click **Apply**. This can take a minute.
+
+![Choose grandmaster and eth0, then Apply](assets/io-box/grandmaster.png)
+
+### 5. Confirm on dserv.net
+
+Open your workgroup page on [dserv.net](https://dserv.net) (see [Connecting to the device](ess-control-quick-start.md)). The trainer should show profile **incage** and **grandmaster** on **eth0**.
+
+![Workgroup page showing incage profile and grandmaster on eth0](assets/io-box/check.png)
 
 ## Adopt the I/O box
 
