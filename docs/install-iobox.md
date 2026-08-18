@@ -14,7 +14,7 @@ Stay on the system software page after the updates finish (the page that opens w
 
 In the **SYSTEM** section, set **PROFILE** to **incage** and click **Apply**.
 
-![Set PROFILE to incage and click Apply](assets/io-box/profile.png)
+<img src="assets/io-box/profile.png" alt="Set PROFILE to incage and click Apply" width="526" />
 
 ### 3. Set the time role
 
