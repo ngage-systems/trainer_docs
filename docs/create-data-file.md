@@ -52,7 +52,7 @@ The data file that was just collected should appear with status **ok**. Select i
 
 ![Datafiles list with Download as Zip](assets/data-file/datafiles_list.png)
 
-Status **obs_only** means post-processing of the data file failed.
+Status **obs_only** means post-processing of the data file failed. Ask an agent to fix the extractor.
 
 ## Analyze the file
 

@@ -17,16 +17,13 @@ If **dserv Camera** is not listed, close the browser window and open the system 
 Coding agents use a reference file to add camera snapshots to tasks. SSH into the trainer (see [SSH into a device](ssh-into-device.md)) and download it into `/home/lab/systems/agentic-coding`.
 
 ```bash
-ssh lab@[ip-address-of-trainer]
 mkdir -p /home/lab/systems/agentic-coding
 wget -O /home/lab/systems/agentic-coding/camera_snapshots.md https://raw.githubusercontent.com/SheinbergLab/dserv/main/docs/camera_snapshots.md
 ```
 
-The default username is `lab` if you did not change it during provisioning.
-
 ## 3. Enable the camera
 
-In ESS Control, click **Settings** in the top right. On the left, choose **camera**. Click the boxes for **enabled** and **look_behind**, then close the dialog.
+In ESS Control, click **Settings** in the top right. On the left, choose **camera**. Check the box below "look_behind" and set rotation to 90. Close the dialog box.
 
 ![Camera settings with enabled and look_behind](assets/camera/settings.png)
 
