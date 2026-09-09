@@ -6,9 +6,13 @@ Open a project in ESS Control, save a task config, collect trials into a data fi
 
 Make sure you are in a project. If not, select **Project** → **New Project**, give it a name, and click **Create**.
 
+![Project menu with New Project](assets/data-file/new_project.png)
+
 ## 2. Choose the task
 
 Choose the **System**, **Protocol**, and **Variant** you want to use, along with the settings for that task.
+
+![Setup tab with System, Protocol, and Variant](assets/data-file/choose_task.png)
 
 ## 3. Save the config
 
@@ -17,6 +21,12 @@ At the bottom of that settings pane, click **New** to save the config. Give it a
 ## 4. Open the data file
 
 On the **Configs** tab, click **Open** to load that config and open a data file.
+
+![Configs tab with Open on a saved config](assets/data-file/config.png)
+
+The filename appears and **Open** changes to **Close**.
+
+![Data file open showing the filename](assets/data-file/data_file_open.png)
 
 ## 5. Start the task
 
@@ -34,9 +44,13 @@ If the block was stopped in the middle, click **Close** to close the data file.
 
 In the top right, click the **ESS Control** dropdown and select **Data Manager**.
 
+![ESS Control menu with Data Manager](assets/data-file/data_manager_link.png)
+
 ## 9. Download the file
 
 The data file that was just collected should appear with status **ok**. Select it, then click **Download** → **Download as zip**.
+
+![Datafiles list with Download as Zip](assets/data-file/datafiles_list.png)
 
 Status **obs_only** means post-processing of the data file failed.
 

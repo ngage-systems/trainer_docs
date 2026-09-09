@@ -28,9 +28,13 @@ The default username is `lab` if you did not change it during provisioning.
 
 In ESS Control, click **Settings** in the top right. On the left, choose **camera**. Click the boxes for **enabled** and **look_behind**, then close the dialog.
 
+![Camera settings with enabled and look_behind](assets/camera/settings.png)
+
 ## 4. Add snapshots to a task with a coding agent
 
 Follow [Modifying protocols with agentic coding](agentic-modify-protocols.md). When you prompt the agent, tell it to use `/home/lab/systems/agentic-coding/camera_snapshots.md` and say when you want a photo. For example:
+
+![Agent prompt referencing camera_snapshots.md](assets/camera/agent_prompt.png)
 
 ```
 In search > circles, I want to take a photo when the subject selects the target.
