@@ -33,4 +33,4 @@ Click the **hostname** of the device you want to control. It may take a minute t
 
 ---
 
-[← Attaching to the cage](cage-mounting.md) · [SSH into a device →](ssh-into-device.md)
+[← Attaching to the cage](cage-mounting.md) · [Create a data file →](create-data-file.md)

@@ -86,4 +86,4 @@ On a campus or managed network, ask IT to allow PTP multicast (UDP ports 319 and
 
 ---
 
-[← Update system software](update-system-software.md) · [Enable offline mode →](enable-offline-mode.md)
+[← Enable the trainer camera](enable-camera.md) · [Enable offline mode →](enable-offline-mode.md)

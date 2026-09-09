@@ -44,4 +44,4 @@ If updates exist, apply them in this order: **dlsh**, then **dserv**, then **sti
 
 ---
 
-[← Enable cloud trial upload](enable-cloud.md) · [Install an I/O box →](install-iobox.md)
+[← Enable cloud trial upload](enable-cloud.md) · [Enable the trainer camera →](enable-camera.md)

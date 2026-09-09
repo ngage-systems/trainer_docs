@@ -61,4 +61,4 @@ On first login, accept the host key fingerprint when prompted. Enter the passwor
 
 ---
 
-[← Connecting to the device](ess-control-quick-start.md) · [Re-provision a trainer →](reprovision-trainer.md)
+[← Create a data file](create-data-file.md) · [Re-provision a trainer →](reprovision-trainer.md)
