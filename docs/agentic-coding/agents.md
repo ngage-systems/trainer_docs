@@ -2,18 +2,163 @@
 
 General reference for creating and modifying **systems**, **protocols**, and **variants**. Read this before editing scripts under `/home/lab/systems/` or running load commands.
 
+**Test headless first** with `ess_test` — do not start with a live `essctrl` load. See [Headless testing with ess_test](#headless-testing-with-ess_test). Package README: `/home/lab/systems/dlsh/vfs/lib/ess_test/README.md`.
+
 ---
 
 ## Preferred development method
 
 **Build incrementally: simple first, test, add complexity, test again.** Do not implement a full protocol in one pass.
 
-1. **Start from a working baseline** in the same system (or a sibling protocol) and confirm load + one trial works.
+1. **Start from a working baseline** in the same system (or a sibling protocol) and confirm it **`ess_test::load_system`s** (and one live trial once that is green).
 2. **Add one layer per iteration** — use temporary variant names (`step1`, `debug`, …) or branches while bringing up; merge into one production variant when stable.
-3. **Test after every change** — load alone is insufficient; check `loading_progress`, then RMT display, then touch/reward/record path.
-4. **Keep loaders minimal early** — positions and touch-related columns first; prove `*_stim.tcl` on RMT before rich stimdg payloads.
+3. **Test after every change with `ess_test`** — loader → stimdg, then `real_ess`/`load_system`, then stim `stim_source`/`play`. Live `loading_progress`, RMT display, and touch/reward come **after** those pass.
+4. **Keep loaders minimal early** — positions and touch-related columns first; prove `*_stim.tcl` sources under `ess_test::stim_source` before rich stimdg payloads, then look at RMT.
 5. **Wire stimdg → display only when display works** — prefer flat columns, integer seeds, or scalars; avoid nested structures in stimdg.
 6. **Add protocol extras last** — live params, `forced_side`, `mistouched`, viz, decorations, large `n_rep`.
+
+---
+
+## Headless testing with `ess_test`
+
+Use **`ess_test` first** when creating or changing a system, protocol, loader, variant, or stim file. It runs the real Tcl without dserv, OpenGL, or hardware, so syntax, namespace, loader-arg, stimdg, and (partial) state-machine load bugs show up in a `dlsh` process instead of on the live rig.
+
+Canonical docs: `/home/lab/systems/dlsh/vfs/lib/ess_test/README.md`. Copy-from examples: `test_ess_test.tcl` (loader + stim) and `test_ess_harness.tcl` (`load_system`).
+
+Live `essctrl` / `dservctl` load is the **second** gate — appearance, viz, touch, buttons, reward, and the running state machine still need the rig. Do not start there.
+
+### Which harness
+
+| You changed | Harness | What it proves |
+|-------------|---------|----------------|
+| `*_loaders.tcl` / variants / stimdg columns | **loader** (`load_loaders` + `run_loader` / `run_variant`) | trial table: columns, lengths, factorial counts, per-row values |
+| `*_stim.tcl` | **stim** (`stub_stim2` + `stim_source` + `play`) | file sources; per-frame numbers handed to stim2 (not pixels) |
+| `<system>.tcl`, protocol init, load pipeline, unpaired states | **ESS** (`real_ess` + `load_system`) | genuine `ess-2.0.tm` load: status, `ess/load_error`, trial count, stimdg sanity |
+
+**One harness per interp.** `load_loaders` installs a fake `ess` package; `real_ess` loads the real one. Do not mix them in the same `dlsh` invocation.
+
+**Honest boundary:** this tests **loading and data**, not **running**. No real stim2, vsync, eye/joystick/juicer, or live event loop. `rmtOpen` returns 0, so `configure_stim` takes its not-connected path.
+
+### How to run
+
+Default systems root is `~/systems/ess` (`/home/lab/systems/ess` on this lab). Override only if needed:
+
+```tcl
+ess_test::config -systems_root /home/lab/systems/ess
+```
+
+Preferred (standalone interp, `dlsh.zip` already has the package):
+
+```bash
+dlsh /path/to/my_tests.tcl
+dlsh -e 'package require ess_test; source /path/to/my_tests.tcl'
+```
+
+If `dlsh` is not on `PATH`, mount `dlsh.zip` in Tcl 9 (see [dlsh, dl_*, and dg_*](#dlsh-dl_-and-dg_)) then `package require ess_test`. To test a copy you just edited in this workspace (before the next VFS rebuild), source the on-disk file instead of the zip:
+
+```tcl
+catch { source /usr/local/dlsh/dlsh_setup.tcl }
+package require dlsh
+catch { package forget ess_test }
+catch { namespace delete ::ess_test }
+source /home/lab/systems/dlsh/vfs/lib/ess_test/ess_test.tcl
+```
+
+Do **not** run `ess_test` inside the live dserv process (`dservctl -c` / ESS interp). That interp already has real `ess` loaded and would load onto the rig.
+
+### Recipe 1 — new or changed state system (do this first)
+
+Catches unpaired `add_action`/`add_transition` (machine parks mid-run), loader throws that used to leave `ess/status` stuck at `loading`, missing helpers, and ragged stimdg columns.
+
+```tcl
+package require ess_test
+ess_test::real_ess
+
+set r [ess_test::load_system <system> <protocol> <variant>]
+ess_test::assert {[dict get $r ok]} \
+    "loaded: [dict get $r error]"
+ess_test::assert {[dict get $r trials] > 0} "built trials"
+ess_test::assert {[ess_test::datapoint ess/status] eq "stopped"} "status usable"
+ess_test::assert {[ess_test::datapoint ess/load_error] eq ""} "no load_error"
+
+# optional: order of publishes, not just the final value
+ess_test::assert {[ess_test::dserv_history ess/status] eq {loading stopped}} \
+    "status entered and left loading"
+
+ess_test::summary
+```
+
+`load_system` returns `{ok trials error}` and **does not rethrow** — a failed load is a result to assert on.
+
+If you already ran the loader harness in this interp, start a **new** `dlsh` for `real_ess`.
+
+Useful extras: `ess_test::datapoints ess/*`, `ess_test::stimdg_problems` (ragged columns), `ess_test::use_systems_root DIR` (switch trees mid-suite).
+
+### Recipe 2 — loader → stimdg
+
+```tcl
+package require ess_test
+ess_test::load_loaders <system> <protocol>
+ess_test::loader_defaults <loader_proc> { <all params with sane defaults> }
+set g [ess_test::run_loader <loader_proc> { <keys to override> }]
+
+ess_test::assert {[dl_length $g:stimtype] == <n>} "trial count"
+ess_test::assert {[dl_exists $g:my_new_col]} "new column present"
+puts [ess_test::dg_summary $g]
+ess_test::summary
+```
+
+Or dry-run a named variant (ESS's own option resolution — comment stripping, first-choice defaults):
+
+```tcl
+ess_test::load_loaders <system> <protocol>
+set g [ess_test::run_variant <system> <protocol> <variant>]
+```
+
+`load_loaders` sources inside `namespace eval ::ess`, and `run_loader` executes the body from `::` — the real oo-method context. Bare helper procs will fail here the same way they fail on the rig; call `::ess::<system>::<protocol>::helper`.
+
+Name the loader. One-arg `run_loader` uses the last registered loader, which silently changes when the protocol grows another `add_loader`.
+
+### Recipe 3 — stim file sources and per-frame numbers
+
+```tcl
+ess_test::stub_stim2
+ess_test::stim_source <system> <protocol>
+
+ess_test::set_time 0
+nexttrial 0   ;# plus whatever args this protocol's nexttrial takes
+ess_test::clear_captures
+sample_on     ;# or target_on / pursuit_start / …
+ess_test::play -dur 1.0 -dt 0.016
+
+ess_test::values translateObj <objName>
+ess_test::events
+ess_test::summary
+```
+
+Assert on captured setter args (`motionpatch_*`, `translateObj`, `polycolor`, `setVisible`, `dserv_send_evt`), keyed by `objName`. This does **not** prove the disc is invisible or that dots look right — that is real stim2.
+
+### Collection sweeps
+
+```bash
+dlsh /home/lab/systems/dlsh/vfs/lib/ess_test/test_systems.tcl
+dlsh /home/lab/systems/dlsh/vfs/lib/ess_test/test_variants.tcl
+```
+
+Use these after touching shared loader patterns or `ess-2.0.tm`, not for every single-variant edit.
+
+### After ess_test passes — still on the rig
+
+| Still needs live dserv / stim2 | Why ess_test cannot |
+|--------------------------------|---------------------|
+| `essctrl` / `dservctl load` + `loading_progress` complete | confirms the running overlay + RMT upload |
+| RMT `nexttrial` / `sample_on` and your eyes | pixels, masks, shaders |
+| Stimulus Display (`graphics/stimulus`) | viz subprocess |
+| `ess::start` + `ess/action_state` + `touch_win_simulate` / `button_simulate` | running state machine |
+| `file_open` / `file_close` + extractor → trials dgz | real logger, `.ess` bytes, `*_extract.tcl` |
+| touch / juice / sound / camera | hardware |
+
+Skip those until the matching recipe above is green.
 
 ---
 
@@ -185,7 +330,9 @@ flowchart TB
 
 ### Load / essctrl
 
-- Use **`essctrl -c "ess::load_system <system> <protocol> <variant>"`** (main / port 4620).
+Catch syntax, namespace, loader-arg, stimdg, and unpaired-state bugs with **`ess_test` first** ([Headless testing with ess_test](#headless-testing-with-ess_test)) — `ess_test::load_system` returns `{ok trials error}` without needing dserv. The live load below is only after that is green.
+
+- Use **`essctrl -c "ess::load_system <system> <protocol> <variant>"`** (main / port 4620), or `dservctl load`.
 - **Instant return ≠ success** — check `dservGet ess/loading_progress` for `"stage":"complete"`.
 - Avoid **`essctrl -s dserv`** when the dserv channel is wedged (even `return 1` may hang); restart dserv if needed.
 - **`essctrl -s ess`** is poor for verification; use **`send ess {…}`** from main for ESS state and errors.
@@ -211,7 +358,9 @@ flowchart TB
 
 ---
 
-## essctrl quick reference
+## essctrl quick reference (live rig only)
+
+Use after the matching [ess_test](#headless-testing-with-ess_test) recipe passes. For loader/stimdg/load-pipeline bugs, `ess_test` is faster and does not touch the running experiment.
 
 | Service | Port | Notes |
 |---------|------|--------|
@@ -343,7 +492,9 @@ Peer: **trialsync** — `dservctl trialsync 'return ok'`, config `trialsyncconf.
 
 ## Simulating trials and listening for events
 
-Use this pattern to **run trials without touch/hardware**, and to **observe ESS behavior** (state machine, `.ess` event log, datapoints). Load verification alone is not enough.
+Use this **after** [ess_test](#headless-testing-with-ess_test) has already proven the load/stimdg/stim-source path. This pattern **runs trials** without touch/hardware and observes the live state machine, `.ess` event log, and datapoints. `ess_test` cannot do that — its ESS harness tests loading, not running.
+
+To close the loop through a datafile and extractor, see [Session file + extract](#session-file--extract-live-dserv).
 
 ### Prerequisites
 
@@ -359,31 +510,44 @@ Use this pattern to **run trials without touch/hardware**, and to **observe ESS 
 | `send ess {set s $::ess::current(state_system); return [$s status]}` | `running` or `stopped` on the system object — still **not** the current trial phase |
 | **`dservGet ess/action_state`** | **Use this** — current phase, e.g. `sample_on_a`, `wait_for_response_a`, `inter_obs_a` (only published while the system is **running**; absent when stopped) |
 
-Poll `ess/action_state` until it ends with `_a` for the phase you need (action phase). For a button response, wait for **`wait_for_response_a`** before simulating input. If `dservctl get ess/action_state` returns “not found”, call **`ess::start`** first.
+Poll `ess/action_state` until it ends with `_a` for the phase you need (action phase). Wait for **`wait_for_response_a`** before simulating a response. If `dservctl get ess/action_state` returns “not found”, call **`ess::start`** first. A leftover `action_state` from a **previous** system can still be present while `ess/status` is `stopped` — ignore it until after `ess::start` on the system you just loaded.
 
 ```bash
+dservctl wait ess/action_state wait_for_response_a --timeout 30
+# or a one-shot read:
 timeout 3 dservctl get ess/action_state
 ```
 
-### Simulate button responses
+### Simulate a response (touch vs buttons)
 
-Protocols with `use_buttons` and `::ess::button_init` accept **`::ess::button_simulate <channel> <0|1>`** (press / release). Only valid during **`wait_for_response`** — simulating during sample, delay, or letgo gating tends to **`ENDTRIAL` ABORT** and incomplete trial records.
+Read the protocol’s `responded` method — **not** the `use_buttons` param. `search/circles` declares `use_buttons 1` but `responded` is `::ess::touch_in_win 0`; `button_simulate` will never score. Simulate **during `wait_for_response_a` only** — earlier (prestim, sample, delay) tends to `ENDTRIAL` ABORT and the extractor drops the row.
 
-```bash
-# After action_state is wait_for_response_a:
-timeout 5 dservctl -c 'send ess {::ess::button_simulate 0 1}'
-timeout 5 dservctl -c 'send ess {::ess::button_simulate 0 0}'
-```
-
-Wait for pre-sample + sample + delay to finish after `ess::start` (protocol-dependent; match_to_sample defaults are often several seconds unless params are shortened).
-
-**Choosing left vs right channel:** read protocol variables on the system object, then map to match/nonmatch (example for two-choice MTS with `targ_x` / `dist_x`):
+**Touch** (`touch_init` / `touch_in_win` / `touch_win_set`): tap the center of window N. Window 0 is the target in search/circles.
 
 ```bash
-timeout 5 dservctl -c 'send ess {set s $::ess::current(state_system); list [$s get_variable reward_rule] [$s get_variable targ_x] [$s get_variable dist_x]}'
+dservctl wait ess/action_state wait_for_response_a --timeout 20
+dservctl -c 'send ess {::ess::touch_win_simulate 0}'
 ```
 
-Between trials, wait until `ess/action_state` is `inter_obs_a` (or the next trial’s `wait_for_response_a`) before pressing again.
+`touch_win_simulate` injects press+release through `mtouch/event` (same path as the web GUI). `touch_simulate $px $py` is the pixel-coordinate form.
+
+**Buttons** (`button_init` / `button_simulate`): press then release a channel.
+
+```bash
+dservctl wait ess/action_state wait_for_response_a --timeout 30
+dservctl -c 'send ess {::ess::button_simulate 0 1}'
+dservctl -c 'send ess {::ess::button_simulate 0 0}'
+```
+
+**Choosing left vs right** on two-choice MTS: read protocol variables, then map to match/nonmatch (example with `targ_x` / `dist_x`):
+
+```bash
+dservctl -c 'send ess {set s $::ess::current(state_system); list [$s get_variable reward_rule] [$s get_variable targ_x] [$s get_variable dist_x]}'
+```
+
+How long until `wait_for_response_a`: protocol-dependent. Search prestim is ~250 ms; match_to_sample sample+delay can be several seconds unless params are shortened.
+
+Between trials, wait for the **next** `wait_for_response_a` (or `inter_obs_a` then the next response window) before tapping again. After a hit, search goes to `inter_obs_a` immediately.
 
 ### Listen for events and trial datapoints
 
@@ -409,20 +573,83 @@ dservctl --json listen eventlog/events ess/trialinfo ess/action_state
 
 # Terminal 2 — after load
 dservctl -c 'catch {ess::stop} e; catch {ess::reset} e; ess::start'
-# Poll until wait_for_response_a, then button_simulate press/release
+# wait wait_for_response_a, then touch_win_simulate or button_simulate (see above)
 # Repeat for more trials; watch Terminal 1 for event ordering and trialinfo
 ```
 
+### Session file + extract (live dserv)
+
+Not `ess_test`. After a live load, this proves **events land in an `.ess` file and the system's extractor produces a rectangular trials table**. Subject is optional — pass an explicit unique basename to `file_open` instead of `file_suggest`.
+
+`file_open` / `file_close` from **main** (`dservctl -c 'ess::file_open …'`) are wrapped: refuse while running or while a file is already open. **Stop before close.** `dservctl ess '::ess::file_open …'` bypasses the guards — prefer main.
+
+Checked on `search/circles/single` (touch, `touch_win_simulate 0`): three taps → `df::load_data` → 3 rows, `correct`/`status` all 1, distinct `stimtype`.
+
+```bash
+# 0. live load already complete (loading_progress stage complete — load_system
+#    from main returns immediately). No file open; not running.
+dservctl -c 'catch {ess::stop} e; catch {ess::file_close} e'
+
+# 1. open a unique file (overwrite ok). Returns 1 on success.
+#    0 = name collision (suffixes exhausted), -1 = another file open,
+#    -2 = logger error, -3 = record_streams wants analog that is not live
+BASE=agent_$(date +%y%m%d%H%M%S)
+dservctl -c "ess::file_open $BASE 1"
+dservctl get ess/datafile          # $BASE
+dservctl get ess/datafile_path     # $ESS_DATA_DIR/$BASE.ess  (often /usr/data/essdat/)
+
+# 2. file_open already reset; start, then simulate in the response window
+dservctl -c 'ess::start'
+for i in 1 2 3; do
+  dservctl wait ess/action_state wait_for_response_a --timeout 20 || break
+  # touch protocol (search/circles): tap target window 0
+  dservctl -c 'send ess {::ess::touch_win_simulate 0}'
+  # button protocol (MTS): press/release the match channel instead
+  #   dservctl -c 'send ess {::ess::button_simulate 0 1}'
+  #   dservctl -c 'send ess {::ess::button_simulate 0 0}'
+done
+dservctl -c 'ess::stop'
+
+# 3. close — TIME CLOSE + logger flush. ess/lastfile keeps the basename.
+dservctl -c 'ess::file_close'
+dservctl get ess/lastfile          # $BASE
+# ess/datafile and ess/datafile_path are now empty
+
+# 4. extract in the df subprocess (same *_extract.tcl the lab uses on close)
+dservctl df 'set p [file join [dservGet ess/data_dir] [dservGet ess/lastfile].ess]
+  set g [df::load_data $p]
+  set cols [dg_tclListnames $g]
+  list n=[dl_length $g:[lindex $cols 0]] cols=$cols'
+```
+
+**What to assert** (read `${system}_extract.tcl` for column names — they are not universal):
+
+- `df::load_data` did not error (no extractor, ragged table, or missing events → throw)
+- row count equals the number of **completed** trials (`search` and MTS count `ENDTRIAL` CORRECT/INCORRECT only; ABORT/no-response rows are dropped)
+- promised columns exist at that length (`stimtype`, `rt`, `correct`/`status`, …)
+- outcomes match what you sent (touch on window 0 in search → `correct` 1; MTS match vs nonmatch channel)
+
+On close, **df** also converts `$ESS_DATA_DIR/$BASE.ess` → `.obs.dgz` → `.trials.dgz` under `/usr/local/dserv/work/` and publishes `df/file_closed`. You do not need to wait for that if you call `df::load_data` yourself. `df/file_closed` `status` is `ok` / `trials_error` / `obs_error` — it does **not** include `n_trials`.
+
+**Pitfalls**
+
+- Wrong input API (`button_simulate` on a touch `responded`) → timeout or ABORT → 0 extracted rows.
+- Simulate off-phase → `ENDTRIAL` ABORT → extractor reports 0 valid trials even though obs periods exist.
+- `file_open` `-3`: protocol `record_streams` wants analog that is not publishing. For a logic test, set that param to `none` (or power the box).
+- `file_open` itself calls `ess::reset`; start **after** open.
+
 ### Common pitfalls
 
+- **Wrong input API** — `button_simulate` on a touch `responded` (e.g. search/circles) never scores; read `responded` first.
 - **`ess::start` fails** if already running — stop/reset first, or only simulate when the machine is in the response window.
-- **Wrong phase** — pressing early produces `ENDTRIAL` ABORT and no normal trial completion.
+- **Wrong phase** — tapping/pressing early produces `ENDTRIAL` ABORT and no normal trial completion.
+- **Stale `action_state`** — still set from the previous system while `ess/status` is `stopped`. Wait until after `ess::start`.
 - **Tcl one-liners** — avoid `catch {dservGet ess/status} x; $x` when the value can be `stopped` (Tcl may treat it as a command). Use `return [dservGet ess/status]` or separate commands.
 - **Listener flag order** — `dservctl --json listen …`, not `dservctl listen --json …`.
 
 ### RMT / stim without a full trial
 
-After load, stim procs can be smoke-tested on the stim service (port 4612) without starting ESS:
+Prove the stim file **sources** and its driver math with `ess_test::stim_source` / `play` first ([Headless testing with ess_test](#headless-testing-with-ess_test)). After a live load, smoke-test appearance on the stim service (port 4612) without starting ESS:
 
 ```bash
 timeout 5 essctrl -s stim -c 'nexttrial 0'
@@ -452,9 +679,10 @@ Use this when the [Choosing where to make the change](#choosing-where-to-make-th
 4. Add **`loader_options`** + matching **`add_loader` argument list** + stimdg columns.
 5. Implement **`nexttrial`** in `*_stim.tcl`; read stimdg with `dl_exists` / `dl_get`.
 6. Wire **touch** in `*_stim.tcl` / protocol from stimdg positions (and radii).
-7. Load with timeout; confirm **100%** `loading_progress`.
-8. Run one trial on hardware: RMT display, touch or buttons, reward.
-9. Consolidate debug variants into one production variant when done.
+7. **Headless `ess_test`** ([Headless testing with ess_test](#headless-testing-with-ess_test)): `run_loader`/`run_variant` on stimdg, `stim_source` (file sources), then `real_ess` + `load_system` (status `stopped`, trials > 0).
+8. Live load with timeout; confirm **100%** `loading_progress` (RMT upload + overlay).
+9. Run one trial on hardware: RMT display, touch or buttons, reward. For a data-path check without a subject, [open a file, simulate a few trials, close, `df::load_data`](#session-file--extract-live-dserv).
+10. Consolidate debug variants into one production variant when done.
 
 ---
 
@@ -567,7 +795,9 @@ if {[info exists ::argv0] && [file tail $::argv0] eq "dlsh-setup.tcl"} {
 
 ### Usage in test scripts
 
-At the top of any standalone `tclsh9.0` test script:
+For ESS loaders / stim / `load_system`, prefer **`package require ess_test`** and run under `dlsh` — see [Headless testing with ess_test](#headless-testing-with-ess_test). Do not hand-roll zipfs harnesses for those.
+
+At the top of any other standalone `tclsh9.0` test script:
 
 ```tcl
 source [file join [file dirname [info script]] dlsh-setup.tcl]
@@ -715,7 +945,7 @@ Loader bodies are `oo::Obj` methods and **do not** resolve bare namespace procs.
 ::ess::match_to_sample::myprotocol::my_helper $g $n_obs
 ```
 
-An `invalid command name` for a helper proc you know exists usually means a missing namespace prefix — often visible as a stall at ~60% `variant_execution`.
+An `invalid command name` for a helper proc you know exists usually means a missing namespace prefix — often visible as a stall at ~60% `variant_execution`. `ess_test::load_loaders` / `run_loader` use the same `::ess` source context, so this fails headless instead of on the rig.
 
 **Source file vs runtime namespace:** `*_loaders.tcl` often declares `namespace eval match_to_sample::myprotocol { … }`, but after ESS loads the protocol, procs live under **`::ess::match_to_sample::myprotocol`**. Call **`::ess::match_to_sample::images::list_pool_pngs`**, not `::match_to_sample::images::list_pool_pngs`.
 
@@ -750,9 +980,11 @@ timeout 5 essctrl -c 'send ess {set s $::ess::current(state_system); list [$s ge
 
 ### Testing without full hardware
 
-See **[Simulating trials and listening for events](#simulating-trials-and-listening-for-events)** for `dservctl listen`, `ess/action_state`, `button_simulate`, and common pitfalls.
+**Loaders, stim files, and `load_system`:** use **`ess_test`**, not a live essctrl load. See [Headless testing with ess_test](#headless-testing-with-ess_test). That is the inner loop for new state systems.
 
-**Load verification** (always):
+**Running trials** without a subject: **[Simulating trials and listening for events](#simulating-trials-and-listening-for-events)** (`dservctl wait` on `ess/action_state`, then `touch_win_simulate` or `button_simulate`).
+
+**Live load** (after ess_test is green — confirms overlay + RMT):
 
 ```bash
 timeout 5 essctrl -c 'return [dservGet ess/loading_progress]'   # stage must be "complete"
@@ -984,6 +1216,7 @@ Verify fparams columns exist after load: `send ess { return [dl_exists stimdg:sa
 
 ## Related docs
 
+- `/home/lab/systems/dlsh/vfs/lib/ess_test/README.md` — `ess_test` package API
 - `/home/lab/dserv/docs/local_systems_setup/README.md` — install and first run
 - `/home/lab/dserv/tools/essqt/docs/ess_project_context.md` — ESS / GUI context
 - `/usr/local/dserv/config/essctrl.tcl` — IPC wrappers
@@ -991,4 +1224,4 @@ Verify fparams columns exist after load: `send ess { return [dl_exists stimdg:sa
 
 ---
 
-*Lab rig notes: use `essctrl -c` or `dservctl` for loads; verify with `loading_progress` + `send ess`; poll `ess/action_state` for trial phases (only while running); `dservctl --json listen` for events; after `systemctl restart dserv` wait 5s then `dservctl <subprocess> 'return ok'`; registry sync on restart can overwrite `/home/lab/systems/ess/` — recover from `/home/lab/systems/.sync_displaced/`; subprocess configs in `/usr/local/dserv/config/` need full restart, no hot-reload; watch `!TCL_ERROR` + `catch {source …}` for brace bugs in config Tcl; loader helpers = `::ess::system::protocol::proc`; no `dl_ge` (use `dl_gte`); scratch vectors in `dl_local` not temp stimdg columns; even `n_rep` for balanced MTS sides; nested trial slots: `lappend row [list $item]`, `dl_append $g:col [list $row]`, read whole cell then `[lindex $val $k]`; colors: same seed as geometry, not `set_layer_rgb` mixed with seeded shapes; viz: braced `set_viz_config` + `string map`, `package forget` + reload tm in `setup`, STIMTYPE before draw ON, `graphics/stimulus` length ≫ 400; `variable img_cache [dict create]` for PNG viz; PNG preview = `img_load` + per-draw `img_imgtolist` + `dlg_image`; PNG RMT = `shaderImageLoad` + `image` shader; object pool under `$ESS_STIMULUS_DIR/search/random_objects`.*
+*Lab rig notes: **`ess_test` first** (headless loader / `load_system` / stim source — [Headless testing with ess_test](#headless-testing-with-ess_test)); then `essctrl -c` or `dservctl` for live loads; verify with `loading_progress` + `send ess`; poll `ess/action_state` for trial phases (only while running); `dservctl --json listen` for events; after `systemctl restart dserv` wait 5s then `dservctl <subprocess> 'return ok'`; registry sync on restart can overwrite `/home/lab/systems/ess/` — recover from `/home/lab/systems/.sync_displaced/`; subprocess configs in `/usr/local/dserv/config/` need full restart, no hot-reload; watch `!TCL_ERROR` + `catch {source …}` for brace bugs in config Tcl; loader helpers = `::ess::system::protocol::proc`; no `dl_ge` (use `dl_gte`); scratch vectors in `dl_local` not temp stimdg columns; even `n_rep` for balanced MTS sides; nested trial slots: `lappend row [list $item]`, `dl_append $g:col [list $row]`, read whole cell then `[lindex $val $k]`; colors: same seed as geometry, not `set_layer_rgb` mixed with seeded shapes; viz: braced `set_viz_config` + `string map`, `package forget` + reload tm in `setup`, STIMTYPE before draw ON, `graphics/stimulus` length ≫ 400; `variable img_cache [dict create]` for PNG viz; PNG preview = `img_load` + per-draw `img_imgtolist` + `dlg_image`; PNG RMT = `shaderImageLoad` + `image` shader; object pool under `$ESS_STIMULUS_DIR/search/random_objects`.*
