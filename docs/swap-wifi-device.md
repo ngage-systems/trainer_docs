@@ -1,6 +1,6 @@
 # Swap the default Wi-Fi adapter
 
-Older trainers use the Raspberry Pi's built-in Wi-Fi. Newer trainers come with a USB Wi-Fi adapter. This guide switches which one is the default. Saved Wi-Fi networks are reused. The script does not rewrite those profiles.
+A USB Wi-Fi adapter has better range and a more reliable connection than the Raspberry Pi's built-in radio. Older trainers use that built-in radio, so adding a USB adapter is how you get the better link. Newer trainers already come with one. This guide switches which adapter is the default. Saved Wi-Fi networks are reused. The script does not rewrite those profiles.
 
 **If something goes wrong, the trainer can become unreachable over Wi-Fi.** Have an Ethernet cable ready before you start, so you can plug in and reach the device if Wi-Fi does not come back after the reboot.
 

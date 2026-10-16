@@ -23,7 +23,7 @@ End-user guides for the behavioral training device: hardware overview, daily ope
 | [Enable offline mode](docs/enable-offline-mode.md) | Run without dserv.net registration or automatic task updates. |
 | [Modifying variant options](docs/modify-variant-options.md) | Change dropdown options for a task variant in ESS Workbench. |
 | [Managing Wi-Fi connections](docs/modify-wifi-connections.md) | Add or change networks with nmcli, including eduroam and campus enterprise Wi-Fi. |
-| [Swap the default Wi-Fi adapter](docs/swap-wifi-device.md) | Switch between the built-in radio on older trainers and the USB adapter that ships with newer ones. |
+| [Swap the default Wi-Fi adapter](docs/swap-wifi-device.md) | Add a USB adapter to an older trainer for better range and a more reliable connection, or switch which radio is the default. |
 | [Modifying protocols with agentic coding](docs/agentic-modify-protocols.md) | Use Cursor or VS Code over SSH to create or modify tasks in an existing system. |
 | [Agent guide for systems development](docs/agentic-coding/agents.md) | Reference for creating and modifying systems, protocols, and variants. |
 | [VS Code tasks for dserv/ESS](docs/agentic-coding/vscode-web.md) | Run dserv/ESS commands as VS Code tasks in a web environment. |
