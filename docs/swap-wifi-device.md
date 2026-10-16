@@ -1,12 +1,23 @@
 # Swap the default Wi-Fi adapter
 
-The trainer uses its built-in Wi-Fi radio by default. You can make a USB Wi-Fi adapter the default instead, or switch back to the built-in radio. Saved Wi-Fi networks are reused. The script does not rewrite those profiles.
+Older trainers use the Raspberry Pi's built-in Wi-Fi. Newer trainers come with a USB Wi-Fi adapter. This guide switches which one is the default. Saved Wi-Fi networks are reused. The script does not rewrite those profiles.
 
 **If something goes wrong, the trainer can become unreachable over Wi-Fi.** Have an Ethernet cable ready before you start, so you can plug in and reach the device if Wi-Fi does not come back after the reboot.
 
+## Recommended hardware
+
+Newer trainers ship with this adapter and hub. Use the same parts on an older trainer.
+
+- **Wi-Fi adapter:** [EDUP EP-AX1672](https://www.amazon.com/dp/B0CZ82RM5L)
+- **USB hub:** [Anker 4-port hub](https://www.amazon.com/dp/B00XMD7KPU?th=1)
+
+Plug the adapter into the hub. There is not enough room to seat the adapter in a trainer USB port, and the hub's extra ports are there for other devices.
+
+The white USB 2 ports give slightly better performance than the blue USB 3 ports. Either works fine. Plug the hub into a white USB 2 port when one is free.
+
 ## 1. Plug in the USB adapter
 
-Plug the USB Wi-Fi adapter into the trainer before you choose USB. The script refuses that choice if no USB adapter is visible.
+Newer trainers already have a USB Wi-Fi adapter. On an older trainer, plug one in before you choose USB. The script refuses that choice if no USB adapter is visible.
 
 You can leave the adapter unplugged if you are only switching back to the built-in radio.
 
