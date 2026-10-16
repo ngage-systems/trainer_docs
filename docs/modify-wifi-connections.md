@@ -1,6 +1,8 @@
 # Managing WiFi Connections with nmcli
 
-If you decide you'd like to connect your trainer to a different WiFi network than the one(s) originally provisioned, follow the instructions below. 
+If you decide you'd like to connect your trainer to a different WiFi network than the one(s) originally provisioned, follow the instructions below.
+
+To make a USB Wi-Fi adapter the default radio, or to switch back to the built-in radio, see [Swap the default Wi-Fi adapter](swap-wifi-device.md).
 
 It should be noted that having multiple stored networks (SSIDs) can sometimes lead to unpredictable results when those networks cover overlapping areas, as the trainer can jump from one to another and become seemingly unresponsive. For this reason, we recommend only storing multiple SSIDs if they don't cover overlapping areas.
 
