@@ -185,6 +185,12 @@ Skip those until the matching recipe above is green.
 
 **Cursor workspace** is often `/usr/local/dserv`; **your changes** go under `/home/lab/systems/`.
 
+### Changing dserv itself
+
+Machine-local settings live in `/usr/local/dserv/local/`. They are usually set from the ESS Control **Settings** menu; editing those files directly is fine when needed. Scripts the rig creates there survive a dserv update. Shipped files do not: an update replaces every path the package installs under `/usr/local`, including `config/`, `lib/`, `systems/`, and the rest of the install. `local/README` and `*.EXAMPLE` are shipped and get replaced too.
+
+Before editing a shipped file, tell the user that the change will not survive the next dserv update and that changes to how dserv works are recommended to go through ngage systems ([info@ngage.systems](mailto:info@ngage.systems)). If the user insists, make the edit.
+
 ### Registry sync and displaced local edits
 
 When coding with Cursor, **edit the regular paths** under `/home/lab/systems/ess/...` — do not require per-user overlay setup for normal agent sessions.
@@ -425,7 +431,7 @@ timeout 5 dservctl stimulusstorage 'return ok'   # must return ok, not "server n
 timeout 5 dservctl trialsync 'return ok'
 ```
 
-After editing any `/usr/local/dserv/config/*conf.tcl` loaded by a subprocess, restart dserv (subprocesses do not hot-reload).
+After editing any `/usr/local/dserv/config/*conf.tcl` loaded by a subprocess, restart dserv (subprocesses do not hot-reload). Those files are shipped — warn first that the edit will not survive an update ([Changing dserv itself](#changing-dserv-itself)).
 
 ---
 
@@ -911,7 +917,7 @@ Notes from lab bring-up that are easy to miss from code alone.
 
 ### Dserv config `proc` bodies
 
-When editing `/usr/local/dserv/config/*.tcl` subprocess scripts, a brace mismatch can end a `proc` early so trailing lines execute at **source** time. Symptom: bizarre `!TCL_ERROR` at dserv boot and `send: server "<name>" not found`. Verify with `catch {source …}` (see **Dserv Tcl config subprocesses** above) before debugging runtime `put`/`get`.
+When editing `/usr/local/dserv/config/*.tcl` subprocess scripts, warn first that the edit will not survive an update ([Changing dserv itself](#changing-dserv-itself)); these notes are for diagnosing the running install. A brace mismatch can end a `proc` early so trailing lines execute at **source** time. Symptom: bizarre `!TCL_ERROR` at dserv boot and `send: server "<name>" not found`. Verify with `catch {source …}` (see **Dserv Tcl config subprocesses** above) before debugging runtime `put`/`get`.
 
 ### System version (`default-0.0.0`)
 
